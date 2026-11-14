@@ -1,0 +1,28 @@
+{
+  "name": "gitforge",
+  "version": "0.1.0",
+  "description": "A Git-compatible version control system implemented from scratch in TypeScript and Node.js.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "gitforge": "./dist/cli/main.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "start": "node dist/cli/main.js",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@vitest/coverage-v8": "^5.1.0",
+    "typescript": "^5.8.0",
+    "vitest": "^5.1.0"
+  }
+}
