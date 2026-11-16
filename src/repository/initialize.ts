@@ -253,6 +253,7 @@ async function initializeBareRepository(
   );
 
   const createdFiles: string[] = [];
+  const createdDirectories: string[] = [];
 
   try {
     await writeRepositoryMetadata(
@@ -283,6 +284,7 @@ async function initializeBareRepository(
 
       const destination = path.join(gitDir, relative);
       await mkdir(destination, { recursive: true });
+      createdDirectories.push(destination);
     }
 
     const stagedFiles = [
@@ -322,6 +324,12 @@ async function initializeBareRepository(
     await Promise.all(
       createdFiles.map((file) =>
         rm(file, { force: true })
+      )
+    );
+
+    await Promise.all(
+      createdDirectories.map((dir) =>
+        rm(dir, { recursive: true, force: true })
       )
     );
 
