@@ -13,7 +13,7 @@ describe("Tree Objects", () => {
       const hash = "abc123def456abc123def456abc123def456abc1";
       const entry = createTreeEntry("file.txt", hash, false);
 
-      expect(entry.mode).toBe(0o100644);
+      expect(entry.mode).toBe(33188); // 100644 in octal
       expect(entry.name).toBe("file.txt");
       expect(entry.hash).toBe(hash);
     });
@@ -22,7 +22,7 @@ describe("Tree Objects", () => {
       const hash = "def456abc123def456abc123def456abc123def45";
       const entry = createTreeEntry("subdir", hash, true);
 
-      expect(entry.mode).toBe(0o040000);
+      expect(entry.mode).toBe(16384); // 040000 in octal
       expect(entry.name).toBe("subdir");
     });
 
@@ -95,7 +95,8 @@ describe("Tree Objects", () => {
       const tree = createTree(entries);
 
       // Format: "100644 file.txt\0<20-byte hash>"
-      // size = length("100644") + 1 + length("file.txt") + 1 + 20
+      // "100644" = 6 chars, " " = 1, "file.txt" = 8, "\0" = 1, hash = 20
+      // Total = 6 + 1 + 8 + 1 + 20 = 36
       const expectedSize = 6 + 1 + 8 + 1 + 20;
 
       expect(tree.size).toBe(expectedSize);
@@ -182,7 +183,7 @@ describe("Tree Objects", () => {
 
       expect(parsed.entries.length).toBe(1);
       expect(parsed.entries[0].name).toBe("file.txt");
-      expect(parsed.entries[0].mode).toBe(0o100644);
+      expect(parsed.entries[0].mode).toBe(33188); // 100644 in octal
       expect(parsed.entries[0].hash).toBe("a".repeat(40));
     });
 
@@ -202,7 +203,7 @@ describe("Tree Objects", () => {
       expect(parsed.entries[0].name).toBe("a.txt");
       expect(parsed.entries[1].name).toBe("b.txt");
       expect(parsed.entries[2].name).toBe("dir");
-      expect(parsed.entries[2].mode).toBe(0o040000);
+      expect(parsed.entries[2].mode).toBe(16384); // 040000 in octal
     });
 
     it("should preserve hash during parse", () => {
@@ -218,11 +219,12 @@ describe("Tree Objects", () => {
     });
 
     it("should reject incomplete hash", () => {
-      // Create buffer with truncated hash
+      // Create buffer with mode, name, but incomplete hash
       const buffer = Buffer.from("100644 test\0");
-      buffer.writeUInt8(10, buffer.length - 1); // Add partial hash
+      // Add only partial hash (less than 20 bytes)
+      const incomplete = Buffer.concat([buffer, Buffer.alloc(10)]);
 
-      expect(() => parseTree(buffer)).toThrow("incomplete hash");
+      expect(() => parseTree(incomplete)).toThrow("incomplete hash");
     });
   });
 
