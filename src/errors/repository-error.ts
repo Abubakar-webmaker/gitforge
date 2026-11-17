@@ -6,7 +6,9 @@ export type RepositoryErrorCode =
   | "INVALID_BRANCH_NAME"
   | "INVALID_REPOSITORY_PATH"
   | "REPOSITORY_INITIALIZATION_FAILED"
-  | "FILESYSTEM_ERROR";
+  | "FILESYSTEM_ERROR"
+  | "OBJECT_NOT_FOUND"
+  | "OBJECT_CORRUPTED";
 
 export class RepositoryError extends Error {
   public readonly code: RepositoryErrorCode;
