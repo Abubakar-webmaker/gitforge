@@ -16,6 +16,7 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 import type { Repository } from "../repository/repository.js";
 import { RepositoryError } from "../errors/repository-error.js";
+<<<<<<< HEAD
 import { compressObject, decompressObject } from "./compress.js";
 import { parseObjectHeader } from "./hash.js";
 
@@ -28,6 +29,11 @@ import { parseObjectHeader } from "./hash.js";
  * @param hash - 40-character hex SHA-1 hash
  * @returns Full path to the object file
  */
+=======
+import { decompressObject } from "./compress.js";
+import { parseObjectHeader } from "./hash.js";
+
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function getObjectPath(objectsDir: string, hash: string): string {
   if (!/^[0-9a-f]{40}$/i.test(hash)) {
     throw new Error(`Invalid object hash: "${hash}"`);
@@ -39,6 +45,7 @@ export function getObjectPath(objectsDir: string, hash: string): string {
   return path.join(objectsDir, dir, file);
 }
 
+<<<<<<< HEAD
 /**
  * Write a Git object to storage (atomic write with atomic rename).
  *
@@ -47,6 +54,8 @@ export function getObjectPath(objectsDir: string, hash: string): string {
  * @param data - Compressed object data (header + content, already compressed)
  * @throws RepositoryError if write fails
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function writeObject(
   repository: Repository,
   hash: string,
@@ -56,6 +65,7 @@ export async function writeObject(
     const objectPath = getObjectPath(repository.layout.objects, hash);
     const objectDir = path.dirname(objectPath);
 
+<<<<<<< HEAD
     // Ensure object directory exists
     await mkdir(objectDir, { recursive: true });
 
@@ -69,12 +79,24 @@ export async function writeObject(
     }
 
     // Write to temporary file first (atomic write)
+=======
+    await mkdir(objectDir, { recursive: true });
+
+    try {
+      await stat(objectPath);
+      return;
+    } catch {
+      // Expected
+    }
+
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     const tempDir = repository.layout.objects;
     const tempFile = path.join(tempDir, `.tmp-${randomUUID()}`);
 
     try {
       await writeFile(tempFile, data, { flag: "wx" });
 
+<<<<<<< HEAD
       // Atomic rename
       try {
         await rename(tempFile, objectPath);
@@ -84,6 +106,14 @@ export async function writeObject(
           const existing = await readFile(objectPath);
           if (existing.equals(data)) {
             // Identical object already exists, fine
+=======
+      try {
+        await rename(tempFile, objectPath);
+      } catch (error) {
+        try {
+          const existing = await readFile(objectPath);
+          if (existing.equals(data)) {
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
             await rm(tempFile, { force: true });
             return;
           }
@@ -94,7 +124,10 @@ export async function writeObject(
         throw error;
       }
     } catch (error) {
+<<<<<<< HEAD
       // Clean up temp file
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
       await rm(tempFile, { force: true });
       throw error;
     }
@@ -107,6 +140,7 @@ export async function writeObject(
   }
 }
 
+<<<<<<< HEAD
 /**
  * Read a raw (compressed) object from storage.
  *
@@ -115,6 +149,8 @@ export async function writeObject(
  * @returns Compressed object data
  * @throws RepositoryError if object not found or read fails
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function readRawObject(
   repository: Repository,
   hash: string
@@ -152,6 +188,7 @@ export async function readRawObject(
   }
 }
 
+<<<<<<< HEAD
 /**
  * Read and decompress an object from storage.
  *
@@ -159,6 +196,8 @@ export async function readRawObject(
  * @param hash - 40-character hex SHA-1
  * @returns Decompressed object data (header + content)
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function readObject(
   repository: Repository,
   hash: string
@@ -179,6 +218,7 @@ export async function readObject(
   }
 }
 
+<<<<<<< HEAD
 /**
  * Read an object and parse it into typed content.
  *
@@ -186,6 +226,8 @@ export async function readObject(
  * @param hash - 40-character hex SHA-1
  * @returns Object content (after header) and header info
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function readObjectData(
   repository: Repository,
   hash: string
@@ -193,6 +235,7 @@ export async function readObjectData(
   try {
     const decompressed = await readObject(repository, hash);
 
+<<<<<<< HEAD
     // Parse header
     const { type, size, headerSize } = parseObjectHeader(decompressed);
 
@@ -200,6 +243,12 @@ export async function readObjectData(
     const content = decompressed.slice(headerSize);
 
     // Validate content size
+=======
+    const { type, size, headerSize } = parseObjectHeader(decompressed);
+
+    const content = decompressed.slice(headerSize);
+
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     if (content.length !== size) {
       throw new RepositoryError(
         "OBJECT_CORRUPTED",
@@ -221,9 +270,12 @@ export async function readObjectData(
   }
 }
 
+<<<<<<< HEAD
 /**
  * Check if an object exists in storage.
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function objectExists(
   repository: Repository,
   hash: string
@@ -236,6 +288,7 @@ export async function objectExists(
     return false;
   }
 }
+<<<<<<< HEAD
 
 /**
  * Update error type to include new error codes.
@@ -246,3 +299,5 @@ declare module "../errors/repository-error.js" {
     OBJECT_CORRUPTED: "OBJECT_CORRUPTED";
   }
 }
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)

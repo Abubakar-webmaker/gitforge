@@ -5,6 +5,7 @@
 
 import { createHash } from "node:crypto";
 
+<<<<<<< HEAD
 export type HashAlgorithm = "sha1";
 
 /**
@@ -35,26 +36,45 @@ export function hashObject(type: string, data: Buffer): string {
 /**
  * Compute SHA-1 hash of a string using Git's object format.
  */
+=======
+export function hashObject(type: string, data: Buffer): string {
+  const size = data.length;
+  const header = `${type} ${size}\0`;
+  const headerBuffer = Buffer.from(header, "utf8");
+  const fullData = Buffer.concat([headerBuffer, data]);
+  const hash = createHash("sha1");
+  hash.update(fullData);
+  return hash.digest("hex");
+}
+
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function hashObjectString(type: string, content: string): string {
   return hashObject(type, Buffer.from(content, "utf8"));
 }
 
+<<<<<<< HEAD
 /**
  * Build the Git object header (used for hashing).
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function buildObjectHeader(type: string, size: number): Buffer {
   const header = `${type} ${size}\0`;
   return Buffer.from(header, "utf8");
 }
 
+<<<<<<< HEAD
 /**
  * Build full Git object data (header + content).
  */
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function buildObjectData(type: string, content: Buffer): Buffer {
   const header = buildObjectHeader(type, content.length);
   return Buffer.concat([header, content]);
 }
 
+<<<<<<< HEAD
 /**
  * Parse object header from a buffer.
  * Returns the size of the header and the parsed type and size.
@@ -63,6 +83,11 @@ export function parseObjectHeader(
   data: Buffer
 ): { type: string; size: number; headerSize: number } {
   // Find the null terminator that separates header from content
+=======
+export function parseObjectHeader(
+  data: Buffer
+): { type: string; size: number; headerSize: number } {
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
   const nullIndex = data.indexOf(0);
 
   if (nullIndex === -1) {

@@ -3,7 +3,10 @@
  * Exports all object types and database operations.
  */
 
+<<<<<<< HEAD
 // Types
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export type {
   ObjectType,
   Blob,
@@ -17,7 +20,10 @@ export type {
   ObjectHeader
 } from "./types.js";
 
+<<<<<<< HEAD
 // Hashing
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export {
   hashObject,
   hashObjectString,
@@ -26,6 +32,7 @@ export {
   parseObjectHeader
 } from "./hash.js";
 
+<<<<<<< HEAD
 // Compression
 export {
   compressObject,
@@ -35,6 +42,13 @@ export {
 } from "./compress.js";
 
 // Blob operations
+=======
+export {
+  compressObject,
+  decompressObject
+} from "./compress.js";
+
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export {
   createBlob,
   serializeBlob,
@@ -42,7 +56,10 @@ export {
   parseBlob
 } from "./blob.js";
 
+<<<<<<< HEAD
 // Tree operations
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export {
   createTree,
   serializeTreeContent,
@@ -53,7 +70,10 @@ export {
   isValidTreeMode
 } from "./tree.js";
 
+<<<<<<< HEAD
 // Commit operations
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export {
   createCommit,
   serializeCommitContent,
@@ -63,7 +83,10 @@ export {
   createCommitPerson
 } from "./commit.js";
 
+<<<<<<< HEAD
 // Storage
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export {
   getObjectPath,
   writeObject,
@@ -73,7 +96,10 @@ export {
   objectExists
 } from "./store.js";
 
+<<<<<<< HEAD
 // Database API
+=======
+>>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export {
   writeGitObject,
   readGitObject,
