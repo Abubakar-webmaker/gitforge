@@ -22,3 +22,6 @@ export {
   RepositoryError,
   type RepositoryErrorCode
 } from "./errors/repository-error.js";
+
+// Phase 2: Git Object Database
+export * from "./objects/index.js";
