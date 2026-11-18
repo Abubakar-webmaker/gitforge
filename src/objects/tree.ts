@@ -25,7 +25,9 @@ export function createTree(entries: readonly TreeEntry[]): Tree {
 
   let size = 0;
   for (const entry of entries) {
-    size += String(entry.mode).length + 1 + entry.name.length + 1 + 20;
+    // Mode is stored as octal string in Git format
+    const modeOctal = entry.mode.toString(8);
+    size += modeOctal.length + 1 + entry.name.length + 1 + 20;
   }
 
   return Object.freeze({
