@@ -39,7 +39,9 @@ export function serializeTreeContent(tree: Tree): Buffer {
   const buffers: Buffer[] = [];
 
   for (const entry of tree.entries) {
-    buffers.push(Buffer.from(`${entry.mode} `));
+    // Convert decimal mode to octal string for Git format
+    const modeOctal = entry.mode.toString(8);
+    buffers.push(Buffer.from(`${modeOctal} `));
     buffers.push(Buffer.from(entry.name + "\0"));
 
     const hashBuffer = Buffer.alloc(20);
