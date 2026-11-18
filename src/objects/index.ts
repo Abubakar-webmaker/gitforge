@@ -26,7 +26,9 @@ export {
 
 export {
   compressObject,
-  decompressObject
+  decompressObject,
+  compressObjectSync,
+  decompressObjectSync
 } from "./compress.js";
 
 export {

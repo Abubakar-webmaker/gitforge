@@ -3,7 +3,7 @@
  * Git uses zlib with default compression level.
  */
 
-import { deflate, inflate } from "node:zlib";
+import { deflate, inflate, deflateSync, inflateSync } from "node:zlib";
 import { promisify } from "node:util";
 
 const deflateAsync = promisify(deflate);
@@ -22,6 +22,26 @@ export async function compressObject(data: Buffer): Promise<Buffer> {
 export async function decompressObject(data: Buffer): Promise<Buffer> {
   try {
     return await inflateAsync(data);
+  } catch (error) {
+    throw new Error(
+      `Failed to decompress object: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+}
+
+export function compressObjectSync(data: Buffer): Buffer {
+  try {
+    return deflateSync(data);
+  } catch (error) {
+    throw new Error(
+      `Failed to compress object: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+}
+
+export function decompressObjectSync(data: Buffer): Buffer {
+  try {
+    return inflateSync(data);
   } catch (error) {
     throw new Error(
       `Failed to decompress object: ${error instanceof Error ? error.message : String(error)}`
