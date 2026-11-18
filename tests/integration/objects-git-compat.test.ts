@@ -106,7 +106,7 @@ describe("Git Compatibility - Object Hashing", () => {
 
     it("should reject unsorted entries", () => {
       const unsorted = [
-        createTreeEntry("z.txt", "z".repeat(40), false),
+        createTreeEntry("z.txt", "f".repeat(40), false),
         createTreeEntry("a.txt", "a".repeat(40), false) // Out of order
       ];
 

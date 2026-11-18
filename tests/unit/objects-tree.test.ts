@@ -72,7 +72,7 @@ describe("Tree Objects", () => {
 
     it("should reject unsorted entries", () => {
       const entries = [
-        createTreeEntry("z.txt", "z".repeat(40), false),
+        createTreeEntry("z.txt", "f".repeat(40), false),
         createTreeEntry("a.txt", "a".repeat(40), false) // Not sorted
       ];
 
@@ -82,7 +82,7 @@ describe("Tree Objects", () => {
     it("should accept sorted entries", () => {
       const entries = [
         createTreeEntry("a.txt", "a".repeat(40), false),
-        createTreeEntry("z.txt", "z".repeat(40), false)
+        createTreeEntry("z.txt", "f".repeat(40), false)
       ];
 
       const tree = createTree(entries);
