@@ -116,7 +116,7 @@ describe("Tree Objects", () => {
       const serialized = serializeTreeContent(tree);
 
       // Should start with "100644 test.txt\0"
-      const modeAndName = serialized.toString("utf8", 0, 15);
+      const modeAndName = serialized.toString("utf8", 0, 16);
       expect(modeAndName).toBe("100644 test.txt\0");
 
       // Should have 20 bytes of hash at the end

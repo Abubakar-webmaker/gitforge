@@ -1,0 +1,182 @@
+﻿npm : npm notice run gitforge@0.1.0 test
+At line:1 char:1
++ npm test -- --run 2>&1 | Out-File -FilePath test-output-full.txt -Enc ...
++ ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run gitforge@0.1.0 tes 
+   t:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run vitest run --run
+
+[1m[46m RUN [49m[22m [36mv3.1.4 [39m[90mC:/Projects/gitforge[39m
+
+ [32mΓ£ô[39m tests/unit/objects-commit.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [31mΓ¥»[39m tests/unit/objects-tree.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 67[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTreeEntry[2m > [22mshould create a file entry[32m 5[2mms[22m[39m
+[31m   [31m├ù[31m Tree Objects[2m > [22mcreateTreeEntry[2m > [22mshould create a directory entry[39m[32m 18[2mms[22m[39m
+[31m     ΓåÆ Invalid hash: must be 40-character hex[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTreeEntry[2m > [22mshould reject invalid hash[32m 3[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTreeEntry[2m > [22mshould accept 40-char hex hash[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTree[2m > [22mshould create a tree with entries[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTree[2m > [22mshould create an empty tree[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTree[2m > [22mshould be frozen (immutable)[32m 1[2mms[22m[39m
+[31m   [31m├ù[31m Tree Objects[2m > [22mcreateTree[2m > [22mshould reject unsorted entries[39m[32m 1[2mms[22m[39m
+[31m     ΓåÆ Invalid hash: must be 40-character hex[39m
+[31m   [31m├ù[31m Tree Objects[2m > [22mcreateTree[2m > [22mshould accept sorted entries[39m[32m 1[2mms[22m[39m
+[31m     ΓåÆ Invalid hash: must be 40-character hex[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mcreateTree[2m > [22mshould compute correct size[32m 1[2mms[22m[39m
+[31m   [31m├ù[31m Tree Objects[2m > [22mserializeTreeContent[2m > [22mshould serialize single entry[39m[32m 14[2mms[22m[39m
+[31m     ΓåÆ expected '100644 test.txt' to be '100644 test.txt\u0000' // Object.is equality[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mserializeTreeContent[2m > [22mshould serialize directory entry[32m 2[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mserializeTreeContent[2m > [22mshould convert hex hash to binary[32m 2[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mserializeTreeContent[2m > [22mshould serialize multiple entries in order[32m 2[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mparseTree[2m > [22mshould parse single entry[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mparseTree[2m > [22mshould parse multiple entries[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mparseTree[2m > [22mshould preserve hash during parse[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mparseTree[2m > [22mshould reject incomplete hash[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mhashTree[2m > [22mshould compute consistent hash[32m 2[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mhashTree[2m > [22mshould differ for different entries[32m 1[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mround-trip serialization[2m > [22mshould serialize and parse consistently[32m 2[2mms[22m[39m
+   [32mΓ£ô[39m Tree Objects[2m > [22mround-trip serialization[2m > [22mshould maintain hash after parse[32m 1[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/initialize.test.ts [2m([22m[2m46 tests[22m[2m)[22m[33m 2324[2mms[22m[39m
+ [31mΓ¥»[39m tests/integration/objects-git-compat.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 889[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mBlob SHA-1 compatibility[2m > [22mshould match git hash-object for empty blob[32m 139[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mBlob SHA-1 compatibility[2m > [22mshould compute consistent hashes[32m 6[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mBlob SHA-1 compatibility[2m > [22mshould differ for different content[32m 6[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mTree object compatibility[2m > [22mshould create valid tree entries[32m 6[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mTree object compatibility[2m > [22mshould compute consistent tree hashes[32m 7[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mTree object compatibility[2m > [22mshould sort entries correctly[32m 6[2mms[22m[39m
+[31m   [31m├ù[31m Git Compatibility - Object Hashing[2m > [22mTree object compatibility[2m > [22mshould reject unsorted entries[39m[32m 45[2mms[22m[39m
+[31m     ΓåÆ Invalid hash: must be 40-character hex[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mCommit object compatibility[2m > [22mshould create valid commits[32m 5[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mCommit object compatibility[2m > [22mshould compute consistent commit hashes[32m 5[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mCommit object compatibility[2m > [22mshould handle merge commits (multiple parents)[32m 4[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mCommit object compatibility[2m > [22mshould preserve author and committer metadata[32m 5[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mSerialization format compatibility[2m > [22mshould serialize blobs in Git format[32m 4[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mSerialization format compatibility[2m > [22mshould serialize trees in binary format[32m 5[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mSerialization format compatibility[2m > [22mshould serialize commits in text format[32m 4[2mms[22m[39m
+   [32mΓ£ô[39m Git Compatibility - Object Hashing[2m > [22mCompression compatibility[2m > [22mshould decompress compressed blobs[32m 17[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Git Compatibility - Object Hashing[2m > [22mCompression compatibility[2m > [22mshould handle large compressed data [33m 621[2mms[22m[39m
+ [32mΓ£ô[39m tests/integration/discover-error-handling.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1540[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Repository Discovery - Error Handling[2m > [22mdiscovery from bare repository[2m > [22mshould discover bare repository from nested path [33m 380[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/paths-windows.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/objects-compress.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1789[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Object Compression[2m > [22mRound-trip compression (async)[2m > [22mshould compress and decompress large text [33m 732[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Object Compression[2m > [22mSync round-trip[2m > [22mshould handle large data synchronously [33m 921[2mms[22m[39m
+ [32mΓ£ô[39m tests/integration/initialize-error-handling.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 2331[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Repository Initialization - Error Handling[2m > [22mfile system edge cases[2m > [22mshould create repository in deeply nested non-existent path [33m 830[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Repository Initialization - Error Handling[2m > [22minitialization cleanup[2m > [22mshould clean up temporary files on successful initialization [33m 314[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/objects-hash.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/objects-blob.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+ [32mΓ£ô[39m tests/integration/initialize.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 2050[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m should create a repository recognized by standard Git [33m 1392[2mms[22m[39m
+ [32mΓ£ô[39m tests/integration/discover.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1162[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Repository discovery[2m > [22mshould discover a repository from a nested directory [33m 474[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Repository discovery[2m > [22mshould discover a bare repository [33m 477[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/config.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/paths.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mΓ£ô[39m tests/unit/layout.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 12[2mms[22m[39m
+
+[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m[1m[41m Failed Tests 5 
+[49m[22m[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m
+
+[41m[1m FAIL [22m[49m tests/integration/objects-git-compat.test.ts[2m > 
+[22mGit Compatibility - Object Hashing[2m > [22mTree object 
+compatibility[2m > [22mshould reject unsorted entries
+[31m[1mError[22m: Invalid hash: must be 40-character hex[39m
+[36m [2mΓ¥»[22m createTreeEntry src/objects/tree.ts:[2m115:11[22m[39m
+    [90m113| [39m)[33m:[39m [33mTreeEntry[39m {
+    [90m114| [39m  [35mif[39m 
+([33m![39m[36m/^[0-9a-f]{40}$/i[39m[33m.[39m[34mtest[39m(hash)) {
+    [90m115| [39m    [35mthrow[39m [35mnew[39m 
+[33mError[39m([32m"Invalid hash: must be 40-character hex"[39m)[33m;[39m
+    [90m   | [39m          [31m^[39m
+    [90m116| [39m  }
+    [90m117| [39m
+[90m [2mΓ¥»[22m 
+tests/integration/objects-git-compat.test.ts:[2m109:9[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»Γ
+Ä»[1/5]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/objects-tree.test.ts[2m > [22mTree 
+Objects[2m > [22mcreateTreeEntry[2m > [22mshould create a directory entry
+[31m[1mError[22m: Invalid hash: must be 40-character hex[39m
+[36m [2mΓ¥»[22m createTreeEntry src/objects/tree.ts:[2m115:11[22m[39m
+    [90m113| [39m)[33m:[39m [33mTreeEntry[39m {
+    [90m114| [39m  [35mif[39m 
+([33m![39m[36m/^[0-9a-f]{40}$/i[39m[33m.[39m[34mtest[39m(hash)) {
+    [90m115| [39m    [35mthrow[39m [35mnew[39m 
+[33mError[39m([32m"Invalid hash: must be 40-character hex"[39m)[33m;[39m
+    [90m   | [39m          [31m^[39m
+    [90m116| [39m  }
+    [90m117| [39m
+[90m [2mΓ¥»[22m tests/unit/objects-tree.test.ts:[2m23:21[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»Γ
+Ä»[2/5]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/objects-tree.test.ts[2m > [22mTree 
+Objects[2m > [22mcreateTree[2m > [22mshould reject unsorted entries
+[31m[1mError[22m: Invalid hash: must be 40-character hex[39m
+[36m [2mΓ¥»[22m createTreeEntry src/objects/tree.ts:[2m115:11[22m[39m
+    [90m113| [39m)[33m:[39m [33mTreeEntry[39m {
+    [90m114| [39m  [35mif[39m 
+([33m![39m[36m/^[0-9a-f]{40}$/i[39m[33m.[39m[34mtest[39m(hash)) {
+    [90m115| [39m    [35mthrow[39m [35mnew[39m 
+[33mError[39m([32m"Invalid hash: must be 40-character hex"[39m)[33m;[39m
+    [90m   | [39m          [31m^[39m
+    [90m116| [39m  }
+    [90m117| [39m
+[90m [2mΓ¥»[22m tests/unit/objects-tree.test.ts:[2m75:9[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»Γ
+Ä»[3/5]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/objects-tree.test.ts[2m > [22mTree 
+Objects[2m > [22mcreateTree[2m > [22mshould accept sorted entries
+[31m[1mError[22m: Invalid hash: must be 40-character hex[39m
+[36m [2mΓ¥»[22m createTreeEntry src/objects/tree.ts:[2m115:11[22m[39m
+    [90m113| [39m)[33m:[39m [33mTreeEntry[39m {
+    [90m114| [39m  [35mif[39m 
+([33m![39m[36m/^[0-9a-f]{40}$/i[39m[33m.[39m[34mtest[39m(hash)) {
+    [90m115| [39m    [35mthrow[39m [35mnew[39m 
+[33mError[39m([32m"Invalid hash: must be 40-character hex"[39m)[33m;[39m
+    [90m   | [39m          [31m^[39m
+    [90m116| [39m  }
+    [90m117| [39m
+[90m [2mΓ¥»[22m tests/unit/objects-tree.test.ts:[2m85:9[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»Γ
+Ä»[4/5]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/objects-tree.test.ts[2m > [22mTree 
+Objects[2m > [22mserializeTreeContent[2m > [22mshould serialize single 
+entry
+[31m[1mAssertionError[22m: expected '100644 test.txt' to be '100644 
+test.txt\u0000' // Object.is equality[39m
+
+Expected: [32m"100644 test.txt[7m [27m"[39m
+Received: [31m"100644 test.txt"[39m
+
+[36m [2mΓ¥»[22m tests/unit/objects-tree.test.ts:[2m120:27[22m[39m
+    [90m118| [39m      [90m// Should start with "100644 test.txt\0"[39m
+    [90m119| [39m      [35mconst[39m modeAndName [33m=[39m 
+serialized[33m.[39m[34mtoString[39m([32m"utf8"[39m[33m,[39m 
+[34m0[39m[33m,[39m [34m15[39m)[33m;[39m
+    [90m120| [39m      
+[34mexpect[39m(modeAndName)[33m.[39m[34mtoBe[39m([32m"100644 
+test.txt\0"[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m121| [39m
+    [90m122| [39m      [90m// Should have 20 bytes of hash at the end[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»Γ
+Ä»[5/5]ΓÄ»[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (15)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m245 passed[39m[22m[90m (250)[39m
+[2m   Start at [22m 05:18:07
+[2m   Duration [22m 14.98s[2m (transform 1.72s, setup 0ms, collect 3.89s, tests 12.38s, environment 11ms, prepare 9.58s)[22m
+
