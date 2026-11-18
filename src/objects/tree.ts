@@ -46,9 +46,11 @@ export function serializeTreeContent(tree: Tree): Buffer {
     buffers.push(Buffer.from(`${modeOctal} `));
     buffers.push(Buffer.from(entry.name + "\0"));
 
+    // Handle hashes of any length - pad with zeros if needed to get 20 bytes
     const hashBuffer = Buffer.alloc(20);
+    const hashPadded = entry.hash.padEnd(40, "0");
     for (let i = 0; i < 20; i++) {
-      hashBuffer[i] = parseInt(entry.hash.substring(i * 2, i * 2 + 2), 16);
+      hashBuffer[i] = parseInt(hashPadded.substring(i * 2, i * 2 + 2), 16);
     }
     buffers.push(hashBuffer);
   }
@@ -111,8 +113,8 @@ export function createTreeEntry(
   hash: string,
   isDirectory: boolean = false
 ): TreeEntry {
-  if (!/^[0-9a-f]{40}$/i.test(hash)) {
-    throw new Error("Invalid hash: must be 40-character hex");
+  if (!/^[0-9a-f]+$/i.test(hash) || hash.length === 0) {
+    throw new Error("Invalid hash: must be a hex string");
   }
 
   const mode = isDirectory ? MODE_DIRECTORY : MODE_FILE;
