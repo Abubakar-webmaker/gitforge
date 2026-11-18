@@ -19,22 +19,6 @@ import type {
   Blob,
   Tree,
   Commit,
-<<<<<<< HEAD
-  Tag,
-  GitObject
-} from "./types.js";
-import { createBlob, parseBlob, serializeBlob } from "./blob.js";
-import { createTree, parseTree, serializeTree } from "./tree.js";
-import { createCommit, parseCommit, serializeCommit } from "./commit.js";
-
-/**
- * Write a Git object to the repository and return its hash.
- *
- * @param repository - Repository instance
- * @param object - Object to write (blob, tree, commit, or tag)
- * @returns 40-character SHA-1 hash
- */
-=======
   GitObject
 } from "./types.js";
 import { createBlob, serializeBlob } from "./blob.js";
@@ -44,7 +28,6 @@ import { parseBlob } from "./blob.js";
 import { parseTree } from "./tree.js";
 import { parseCommit } from "./commit.js";
 
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function writeGitObject(
   repository: Repository,
   object: GitObject
@@ -63,29 +46,15 @@ export async function writeGitObject(
         serialized = serializeCommit(object);
         break;
       case "tag":
-<<<<<<< HEAD
-        // Tag serialization would go here in Phase 3
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
         throw new Error("Tag objects not yet implemented");
       default:
         throw new Error(`Unknown object type: ${(object as any).type}`);
     }
 
-<<<<<<< HEAD
-    // Compute hash
-    const hash = hashObject(object.type, getObjectContent(serialized));
-
-    // Compress
-    const compressed = await compressObject(serialized);
-
-    // Write to storage
-=======
     const hash = hashObject(object.type, getObjectContent(serialized));
 
     const compressed = await compressObject(serialized);
 
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     await writeObject(repository, hash, compressed);
 
     return hash;
@@ -102,16 +71,6 @@ export async function writeGitObject(
   }
 }
 
-<<<<<<< HEAD
-/**
- * Read a Git object from the repository.
- *
- * @param repository - Repository instance
- * @param hash - 40-character SHA-1 hash
- * @returns Parsed Git object (blob, tree, or commit)
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function readGitObject(
   repository: Repository,
   hash: string
@@ -144,12 +103,6 @@ export async function readGitObject(
   }
 }
 
-<<<<<<< HEAD
-/**
- * Check if an object exists in the repository.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function gitObjectExists(
   repository: Repository,
   hash: string
@@ -161,12 +114,6 @@ export async function gitObjectExists(
   }
 }
 
-<<<<<<< HEAD
-/**
- * Write a blob and return its hash.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function writeBlob(
   repository: Repository,
   content: Buffer
@@ -175,12 +122,6 @@ export async function writeBlob(
   return writeGitObject(repository, blob);
 }
 
-<<<<<<< HEAD
-/**
- * Write a tree and return its hash.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function writeTree(
   repository: Repository,
   tree: Tree
@@ -188,12 +129,6 @@ export async function writeTree(
   return writeGitObject(repository, tree);
 }
 
-<<<<<<< HEAD
-/**
- * Write a commit and return its hash.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export async function writeCommit(
   repository: Repository,
   commit: Commit
@@ -201,15 +136,7 @@ export async function writeCommit(
   return writeGitObject(repository, commit);
 }
 
-<<<<<<< HEAD
-/**
- * Extract content from serialized object (after header).
- */
 function getObjectContent(serialized: Buffer): Buffer {
-  // Find the null terminator (end of header)
-=======
-function getObjectContent(serialized: Buffer): Buffer {
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
   const nullIndex = serialized.indexOf(0);
 
   if (nullIndex === -1) {

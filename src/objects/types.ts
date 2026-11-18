@@ -18,15 +18,9 @@ export interface Blob {
  * Git tree entry - represents a file or subdirectory in a tree.
  */
 export interface TreeEntry {
-<<<<<<< HEAD
-  readonly mode: number; // 100644 (file), 100755 (executable), 040000 (directory)
-  readonly name: string;
-  readonly hash: string; // 40-character hex SHA-1
-=======
   readonly mode: number;
   readonly name: string;
   readonly hash: string;
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 }
 
 /**
@@ -34,11 +28,7 @@ export interface TreeEntry {
  */
 export interface Tree {
   readonly type: "tree";
-<<<<<<< HEAD
-  readonly entries: TreeEntry[];
-=======
   readonly entries: readonly TreeEntry[];
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
   readonly size: number;
 }
 
@@ -47,13 +37,8 @@ export interface Tree {
  */
 export interface Commit {
   readonly type: "commit";
-<<<<<<< HEAD
-  readonly tree: string; // SHA-1 of tree object
-  readonly parents: string[]; // SHA-1s of parent commits
-=======
   readonly tree: string;
   readonly parents: readonly string[];
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
   readonly author: CommitPerson;
   readonly committer: CommitPerson;
   readonly message: string;
@@ -66,13 +51,8 @@ export interface Commit {
 export interface CommitPerson {
   readonly name: string;
   readonly email: string;
-<<<<<<< HEAD
-  readonly timestamp: number; // Unix seconds
-  readonly timezone: string; // e.g., "+0000", "-0800"
-=======
   readonly timestamp: number;
   readonly timezone: string;
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 }
 
 /**
@@ -80,11 +60,7 @@ export interface CommitPerson {
  */
 export interface Tag {
   readonly type: "tag";
-<<<<<<< HEAD
-  readonly object: string; // SHA-1 of tagged object
-=======
   readonly object: string;
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
   readonly objectType: ObjectType;
   readonly name: string;
   readonly tagger: CommitPerson;
