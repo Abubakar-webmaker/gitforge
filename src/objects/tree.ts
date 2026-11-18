@@ -1,0 +1,131 @@
+/**
+ * Git tree object - represents directory structure.
+ */
+
+import type { Tree, TreeEntry } from "./types.js";
+import { buildObjectData, hashObject } from "./hash.js";
+
+const MODE_DIRECTORY = 16384;
+const MODE_FILE = 33188;
+const MODE_EXECUTABLE = 33261;
+
+export function createTree(entries: readonly TreeEntry[]): Tree {
+  for (let i = 1; i < entries.length; i++) {
+    const current = entries[i];
+    const prev = entries[i - 1];
+
+    if (current === undefined || prev === undefined) {
+      throw new Error("Internal error: undefined tree entry");
+    }
+
+    if (current.name <= prev.name) {
+      throw new Error("Tree entries must be sorted by name");
+    }
+  }
+
+  let size = 0;
+  for (const entry of entries) {
+    // Mode is stored as octal string in Git format
+    const modeOctal = entry.mode.toString(8);
+    size += modeOctal.length + 1 + entry.name.length + 1 + 20;
+  }
+
+  return Object.freeze({
+    type: "tree",
+    entries: Object.freeze([...entries]),
+    size
+  });
+}
+
+export function serializeTreeContent(tree: Tree): Buffer {
+  const buffers: Buffer[] = [];
+
+  for (const entry of tree.entries) {
+    // Convert decimal mode to octal string for Git format
+    const modeOctal = entry.mode.toString(8);
+    buffers.push(Buffer.from(`${modeOctal} `));
+    buffers.push(Buffer.from(entry.name + "\0"));
+
+    // Handle hashes of any length - pad with zeros if needed to get 20 bytes
+    const hashBuffer = Buffer.alloc(20);
+    const hashPadded = entry.hash.padEnd(40, "0");
+    for (let i = 0; i < 20; i++) {
+      hashBuffer[i] = parseInt(hashPadded.substring(i * 2, i * 2 + 2), 16);
+    }
+    buffers.push(hashBuffer);
+  }
+
+  return Buffer.concat(buffers);
+}
+
+export function serializeTree(tree: Tree): Buffer {
+  const content = serializeTreeContent(tree);
+  return buildObjectData("tree", content);
+}
+
+export function hashTree(tree: Tree): string {
+  const content = serializeTreeContent(tree);
+  return hashObject("tree", content);
+}
+
+export function parseTree(content: Buffer): Tree {
+  const entries: TreeEntry[] = [];
+  let offset = 0;
+
+  while (offset < content.length) {
+    const spaceIndex = content.indexOf(32, offset);
+    if (spaceIndex === -1) {
+      throw new Error("Invalid tree: expected mode");
+    }
+
+    const modeStr = content.toString("utf8", offset, spaceIndex);
+    const mode = parseInt(modeStr, 8);
+    offset = spaceIndex + 1;
+
+    const nullIndex = content.indexOf(0, offset);
+    if (nullIndex === -1) {
+      throw new Error("Invalid tree: expected name terminator");
+    }
+
+    const name = content.toString("utf8", offset, nullIndex);
+    offset = nullIndex + 1;
+
+    if (offset + 20 > content.length) {
+      throw new Error("Invalid tree: incomplete hash");
+    }
+
+    const hashBytes = content.slice(offset, offset + 20);
+    const hash = hashBytes.toString("hex");
+    offset += 20;
+
+    if (![MODE_DIRECTORY, MODE_FILE, MODE_EXECUTABLE].includes(mode)) {
+      throw new Error(`Invalid tree entry mode: ${mode}`);
+    }
+
+    entries.push({ mode, name, hash });
+  }
+
+  return createTree(entries);
+}
+
+export function createTreeEntry(
+  name: string,
+  hash: string,
+  isDirectory: boolean = false
+): TreeEntry {
+  if (!/^[0-9a-f]+$/i.test(hash) || hash.length === 0) {
+    throw new Error("Invalid hash: must be a hex string");
+  }
+
+  const mode = isDirectory ? MODE_DIRECTORY : MODE_FILE;
+
+  return {
+    mode,
+    name,
+    hash
+  };
+}
+
+export function isValidTreeMode(mode: number): boolean {
+  return [MODE_DIRECTORY, MODE_FILE, MODE_EXECUTABLE].includes(mode);
+}
