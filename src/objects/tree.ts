@@ -1,52 +1,23 @@
 /**
  * Git tree object - represents directory structure.
-<<<<<<< HEAD
- *
- * Git stores tree entries in a binary format:
- * For each entry: "<mode> <name>\0<hash>"
- * where hash is 20 bytes of binary SHA-1 (not hex).
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
  */
 
 import type { Tree, TreeEntry } from "./types.js";
 import { buildObjectData, hashObject } from "./hash.js";
 
-<<<<<<< HEAD
-const MODE_DIRECTORY = 16384; // 040000 in decimal (tree/directory)
-const MODE_FILE = 33188; // 100644 in decimal (regular file)
-const MODE_EXECUTABLE = 33261; // 100755 in decimal (executable)
-
-/**
- * Create a tree object from entries.
- *
- * @param entries - Array of tree entries (must be sorted by name)
- * @returns Tree object
- */
-export function createTree(entries: TreeEntry[]): Tree {
-  // Validate entries are sorted (Git requirement)
-=======
 const MODE_DIRECTORY = 16384;
 const MODE_FILE = 33188;
 const MODE_EXECUTABLE = 33261;
 
 export function createTree(entries: readonly TreeEntry[]): Tree {
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
   for (let i = 1; i < entries.length; i++) {
     if (entries[i].name <= entries[i - 1].name) {
       throw new Error("Tree entries must be sorted by name");
     }
   }
 
-<<<<<<< HEAD
-  // Calculate tree size (header + all entries)
   let size = 0;
   for (const entry of entries) {
-    // Mode (as string) + space + name + null byte + 20 bytes hash
-=======
-  let size = 0;
-  for (const entry of entries) {
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     size += String(entry.mode).length + 1 + entry.name.length + 1 + 20;
   }
 
@@ -57,32 +28,13 @@ export function createTree(entries: readonly TreeEntry[]): Tree {
   });
 }
 
-<<<<<<< HEAD
-/**
- * Serialize a tree to its Git binary format.
- *
- * @param tree - Tree object to serialize
- * @returns Binary tree content (without Git header)
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function serializeTreeContent(tree: Tree): Buffer {
   const buffers: Buffer[] = [];
 
   for (const entry of tree.entries) {
-<<<<<<< HEAD
-    // Write mode and space
-    buffers.push(Buffer.from(`${entry.mode} `));
-
-    // Write name and null byte
-    buffers.push(Buffer.from(entry.name + "\0"));
-
-    // Write binary SHA-1 hash (20 bytes, not hex)
-=======
     buffers.push(Buffer.from(`${entry.mode} `));
     buffers.push(Buffer.from(entry.name + "\0"));
 
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     const hashBuffer = Buffer.alloc(20);
     for (let i = 0; i < 20; i++) {
       hashBuffer[i] = parseInt(entry.hash.substring(i * 2, i * 2 + 2), 16);
@@ -93,48 +45,22 @@ export function serializeTreeContent(tree: Tree): Buffer {
   return Buffer.concat(buffers);
 }
 
-<<<<<<< HEAD
-/**
- * Serialize a tree to its full Git object format.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function serializeTree(tree: Tree): Buffer {
   const content = serializeTreeContent(tree);
   return buildObjectData("tree", content);
 }
 
-<<<<<<< HEAD
-/**
- * Compute SHA-1 hash of a tree.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function hashTree(tree: Tree): string {
   const content = serializeTreeContent(tree);
   return hashObject("tree", content);
 }
 
-<<<<<<< HEAD
-/**
- * Parse a tree from binary content.
- *
- * @param content - Raw tree content (binary format)
- * @returns Parsed tree object
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function parseTree(content: Buffer): Tree {
   const entries: TreeEntry[] = [];
   let offset = 0;
 
   while (offset < content.length) {
-<<<<<<< HEAD
-    // Read mode (space-terminated)
-    const spaceIndex = content.indexOf(32, offset); // 32 = space
-=======
     const spaceIndex = content.indexOf(32, offset);
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     if (spaceIndex === -1) {
       throw new Error("Invalid tree: expected mode");
     }
@@ -142,10 +68,6 @@ export function parseTree(content: Buffer): Tree {
     const mode = parseInt(content.toString("utf8", offset, spaceIndex), 8);
     offset = spaceIndex + 1;
 
-<<<<<<< HEAD
-    // Read name (null-terminated)
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     const nullIndex = content.indexOf(0, offset);
     if (nullIndex === -1) {
       throw new Error("Invalid tree: expected name terminator");
@@ -154,10 +76,6 @@ export function parseTree(content: Buffer): Tree {
     const name = content.toString("utf8", offset, nullIndex);
     offset = nullIndex + 1;
 
-<<<<<<< HEAD
-    // Read hash (20 bytes)
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     if (offset + 20 > content.length) {
       throw new Error("Invalid tree: incomplete hash");
     }
@@ -166,10 +84,6 @@ export function parseTree(content: Buffer): Tree {
     const hash = hashBytes.toString("hex");
     offset += 20;
 
-<<<<<<< HEAD
-    // Validate mode
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
     if (![MODE_DIRECTORY, MODE_FILE, MODE_EXECUTABLE].includes(mode)) {
       throw new Error(`Invalid tree entry mode: ${mode}`);
     }
@@ -180,12 +94,6 @@ export function parseTree(content: Buffer): Tree {
   return createTree(entries);
 }
 
-<<<<<<< HEAD
-/**
- * Create a tree entry for a blob or subtree.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function createTreeEntry(
   name: string,
   hash: string,
@@ -204,12 +112,6 @@ export function createTreeEntry(
   };
 }
 
-<<<<<<< HEAD
-/**
- * Validate tree mode.
- */
-=======
->>>>>>> 3cffd51 (Phase 2: Fix TypeScript errors - proper types, no readonly conflicts, add OBJECT_NOT_FOUND and OBJECT_CORRUPTED error codes)
 export function isValidTreeMode(mode: number): boolean {
   return [MODE_DIRECTORY, MODE_FILE, MODE_EXECUTABLE].includes(mode);
 }
