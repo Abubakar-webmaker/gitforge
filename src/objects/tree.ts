@@ -11,7 +11,14 @@ const MODE_EXECUTABLE = 33261;
 
 export function createTree(entries: readonly TreeEntry[]): Tree {
   for (let i = 1; i < entries.length; i++) {
-    if (entries[i].name <= entries[i - 1].name) {
+    const current = entries[i];
+    const prev = entries[i - 1];
+
+    if (current === undefined || prev === undefined) {
+      throw new Error("Internal error: undefined tree entry");
+    }
+
+    if (current.name <= prev.name) {
       throw new Error("Tree entries must be sorted by name");
     }
   }
@@ -65,7 +72,8 @@ export function parseTree(content: Buffer): Tree {
       throw new Error("Invalid tree: expected mode");
     }
 
-    const mode = parseInt(content.toString("utf8", offset, spaceIndex), 8);
+    const modeStr = content.toString("utf8", offset, spaceIndex);
+    const mode = parseInt(modeStr, 8);
     offset = spaceIndex + 1;
 
     const nullIndex = content.indexOf(0, offset);

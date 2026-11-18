@@ -78,6 +78,10 @@ export function parseCommit(content: Buffer): Commit {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
+    if (line === undefined) {
+      break;
+    }
+
     if (line === "") {
       messageStart = i + 1;
       break;

@@ -46,10 +46,16 @@ export function parseObjectHeader(
   }
 
   const type = parts[0];
-  const size = parseInt(parts[1], 10);
+  const sizeStr = parts[1];
+
+  if (type === undefined || sizeStr === undefined) {
+    throw new Error(`Invalid Git object header: "${headerString}"`);
+  }
+
+  const size = parseInt(sizeStr, 10);
 
   if (isNaN(size) || size < 0) {
-    throw new Error(`Invalid Git object size: "${parts[1]}"`);
+    throw new Error(`Invalid Git object size: "${sizeStr}"`);
   }
 
   if (!["blob", "tree", "commit", "tag"].includes(type)) {
