@@ -19,20 +19,15 @@ import type {
   Blob,
   Tree,
   Commit,
-  Tag,
   GitObject
 } from "./types.js";
-import { createBlob, parseBlob, serializeBlob } from "./blob.js";
-import { createTree, parseTree, serializeTree } from "./tree.js";
-import { createCommit, parseCommit, serializeCommit } from "./commit.js";
+import { createBlob, serializeBlob } from "./blob.js";
+import { serializeTree } from "./tree.js";
+import { serializeCommit } from "./commit.js";
+import { parseBlob } from "./blob.js";
+import { parseTree } from "./tree.js";
+import { parseCommit } from "./commit.js";
 
-/**
- * Write a Git object to the repository and return its hash.
- *
- * @param repository - Repository instance
- * @param object - Object to write (blob, tree, commit, or tag)
- * @returns 40-character SHA-1 hash
- */
 export async function writeGitObject(
   repository: Repository,
   object: GitObject
@@ -51,19 +46,15 @@ export async function writeGitObject(
         serialized = serializeCommit(object);
         break;
       case "tag":
-        // Tag serialization would go here in Phase 3
         throw new Error("Tag objects not yet implemented");
       default:
         throw new Error(`Unknown object type: ${(object as any).type}`);
     }
 
-    // Compute hash
     const hash = hashObject(object.type, getObjectContent(serialized));
 
-    // Compress
     const compressed = await compressObject(serialized);
 
-    // Write to storage
     await writeObject(repository, hash, compressed);
 
     return hash;
@@ -80,13 +71,6 @@ export async function writeGitObject(
   }
 }
 
-/**
- * Read a Git object from the repository.
- *
- * @param repository - Repository instance
- * @param hash - 40-character SHA-1 hash
- * @returns Parsed Git object (blob, tree, or commit)
- */
 export async function readGitObject(
   repository: Repository,
   hash: string
@@ -119,9 +103,6 @@ export async function readGitObject(
   }
 }
 
-/**
- * Check if an object exists in the repository.
- */
 export async function gitObjectExists(
   repository: Repository,
   hash: string
@@ -133,9 +114,6 @@ export async function gitObjectExists(
   }
 }
 
-/**
- * Write a blob and return its hash.
- */
 export async function writeBlob(
   repository: Repository,
   content: Buffer
@@ -144,9 +122,6 @@ export async function writeBlob(
   return writeGitObject(repository, blob);
 }
 
-/**
- * Write a tree and return its hash.
- */
 export async function writeTree(
   repository: Repository,
   tree: Tree
@@ -154,9 +129,6 @@ export async function writeTree(
   return writeGitObject(repository, tree);
 }
 
-/**
- * Write a commit and return its hash.
- */
 export async function writeCommit(
   repository: Repository,
   commit: Commit
@@ -164,11 +136,7 @@ export async function writeCommit(
   return writeGitObject(repository, commit);
 }
 
-/**
- * Extract content from serialized object (after header).
- */
 function getObjectContent(serialized: Buffer): Buffer {
-  // Find the null terminator (end of header)
   const nullIndex = serialized.indexOf(0);
 
   if (nullIndex === -1) {

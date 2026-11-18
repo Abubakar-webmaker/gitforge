@@ -13,16 +13,16 @@ describe("Object Hashing - SHA-1", () => {
       const content = Buffer.from("");
       const hash = hashObject("blob", content);
 
-      // Verified against git hash-object
-      expect(hash).toBe("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+      // Verified against git hash-object: echo -n '' | git hash-object --stdin
+      expect(hash).toBe("e69de29bb2d1d6434b8b29ae775ad8c2e48c5391");
     });
 
     it("should compute SHA-1 for blob with content", () => {
       const content = Buffer.from("Hello, World!");
       const hash = hashObject("blob", content);
 
-      // Verified against git hash-object
-      expect(hash).toBe("65a8e27f5d7b66b6c6e8b8f5e1b4b5f3c1b5f5f1");
+      // Verified against git hash-object: echo -n 'Hello, World!' | git hash-object --stdin
+      expect(hash).toBe("b45ef6fec89518d314f546fd6c3025367b721684");
     });
 
     it("should compute different hashes for different content", () => {

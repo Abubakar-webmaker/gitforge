@@ -3,7 +3,6 @@
  * Exports all object types and database operations.
  */
 
-// Types
 export type {
   ObjectType,
   Blob,
@@ -17,7 +16,6 @@ export type {
   ObjectHeader
 } from "./types.js";
 
-// Hashing
 export {
   hashObject,
   hashObjectString,
@@ -26,7 +24,6 @@ export {
   parseObjectHeader
 } from "./hash.js";
 
-// Compression
 export {
   compressObject,
   decompressObject,
@@ -34,7 +31,6 @@ export {
   decompressObjectSync
 } from "./compress.js";
 
-// Blob operations
 export {
   createBlob,
   serializeBlob,
@@ -42,7 +38,6 @@ export {
   parseBlob
 } from "./blob.js";
 
-// Tree operations
 export {
   createTree,
   serializeTreeContent,
@@ -53,7 +48,6 @@ export {
   isValidTreeMode
 } from "./tree.js";
 
-// Commit operations
 export {
   createCommit,
   serializeCommitContent,
@@ -63,7 +57,6 @@ export {
   createCommitPerson
 } from "./commit.js";
 
-// Storage
 export {
   getObjectPath,
   writeObject,
@@ -73,7 +66,6 @@ export {
   objectExists
 } from "./store.js";
 
-// Database API
 export {
   writeGitObject,
   readGitObject,
