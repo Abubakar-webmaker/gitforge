@@ -16,8 +16,8 @@ export async function executeInitCommand(
 
   const result = await initializeRepository({
     directory,
-    bare: args.bare,
-    initialBranch: args.initialBranch
+    ...(args.bare && { bare: args.bare }),
+    ...(args.initialBranch && { initialBranch: args.initialBranch })
   });
 
   if (args.quiet) {
