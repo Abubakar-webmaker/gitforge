@@ -175,9 +175,7 @@ describe("Phase 3 Plumbing Commands - Integration", () => {
       const tree = createTree(entries);
 
       for (let i = 1; i < tree.entries.length; i++) {
-        expect(tree.entries[i].name).toBeGreaterThan(
-          tree.entries[i - 1].name
-        );
+        expect(tree.entries[i].name > tree.entries[i - 1].name).toBe(true);
       }
     });
 
