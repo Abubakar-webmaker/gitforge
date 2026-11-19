@@ -137,8 +137,8 @@ function parseHashObjectCommand(
     positionals: result.positionals,
     write: result.values.write ?? false,
     stdin: result.values.stdin ?? false,
-    hashPath: result.values.path,
-    file: result.positionals[0]
+    ...(result.values.path !== undefined && { hashPath: result.values.path }),
+    ...(result.positionals[0] !== undefined && { file: result.positionals[0] })
   };
 }
 
@@ -177,7 +177,7 @@ function parseCatFileCommand(
     size: result.values.size ?? false,
     pretty: result.values.pretty ?? false,
     exists: result.values.exists ?? false,
-    object: result.positionals[0]
+    ...(result.positionals[0] !== undefined && { object: result.positionals[0] })
   };
 }
 
@@ -205,7 +205,7 @@ function parseLsTreeCommand(
     positionals: result.positionals,
     long: result.values.long ?? false,
     recursive: result.values.recursive ?? false,
-    treeObject: result.positionals[0]
+    ...(result.positionals[0] !== undefined && { treeObject: result.positionals[0] })
   };
 }
 
@@ -223,7 +223,7 @@ function parseRevParseCommand(
   return {
     command,
     positionals: result.positionals,
-    object: result.positionals[0]
+    ...(result.positionals[0] !== undefined && { object: result.positionals[0] })
   };
 }
 
