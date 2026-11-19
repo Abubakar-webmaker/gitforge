@@ -8,7 +8,9 @@ export type RepositoryErrorCode =
   | "REPOSITORY_INITIALIZATION_FAILED"
   | "FILESYSTEM_ERROR"
   | "OBJECT_NOT_FOUND"
-  | "OBJECT_CORRUPTED";
+  | "OBJECT_CORRUPTED"
+  | "INVALID_REFERENCE"
+  | "INVALID_HEAD";
 
 export class RepositoryError extends Error {
   public readonly code: RepositoryErrorCode;
