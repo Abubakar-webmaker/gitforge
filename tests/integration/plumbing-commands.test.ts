@@ -21,8 +21,7 @@ import {
   createCommitPerson,
   hashCommit,
   writeGitObject,
-  readGitObject,
-  createRepository
+  readGitObject
 } from "../../src/objects/index.js";
 import { initializeRepository } from "../../src/repository/initialize.js";
 import { discoverRepository } from "../../src/repository/discover.js";
