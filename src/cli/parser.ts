@@ -11,14 +11,17 @@ export interface ParsedCliArguments {
   readonly write?: boolean;
   readonly stdin?: boolean;
   readonly hashPath?: string;
+  readonly file?: string;
   // cat-file options
   readonly type?: boolean;
   readonly size?: boolean;
   readonly pretty?: boolean;
   readonly exists?: boolean;
+  readonly object?: string;
   // ls-tree options
   readonly long?: boolean;
   readonly recursive?: boolean;
+  readonly treeObject?: string;
   // write-tree options
   readonly prefix?: string;
 }
@@ -101,9 +104,9 @@ function parseInitCommand(args: string[]): ParsedCliArguments {
   return {
     command: "init",
     positionals: result.positionals,
-    bare: result.values.bare ?? false,
-    quiet: result.values.quiet ?? false,
-    initialBranch: initialBranch ?? "main"
+    ...(result.values.bare && { bare: result.values.bare }),
+    ...(result.values.quiet && { quiet: result.values.quiet }),
+    ...(initialBranch !== undefined && { initialBranch })
   };
 }
 
@@ -242,6 +245,6 @@ function parseWriteTreeCommand(
   return {
     command,
     positionals: result.positionals,
-    prefix: result.values.prefix
+    ...(result.values.prefix !== undefined && { prefix: result.values.prefix })
   };
 }
