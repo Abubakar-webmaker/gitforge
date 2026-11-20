@@ -24,6 +24,9 @@ export interface ParsedCliArguments {
   readonly treeObject?: string;
   // write-tree options
   readonly prefix?: string;
+  // add options
+  readonly addAll?: boolean;
+  readonly addUpdated?: boolean;
 }
 
 export function parseCliArguments(
@@ -43,7 +46,8 @@ export function parseCliArguments(
     "cat-file",
     "ls-tree",
     "rev-parse",
-    "write-tree"
+    "write-tree",
+    "add"
   ];
 
   if (!validCommands.includes(command)) {
@@ -62,6 +66,8 @@ export function parseCliArguments(
     return parseRevParseCommand(command, args);
   } else if (command === "write-tree") {
     return parseWriteTreeCommand(command, args);
+  } else if (command === "add") {
+    return parseAddCommand(command, args);
   }
 
   throw new Error(`Unhandled command: ${command}`);
@@ -246,5 +252,33 @@ function parseWriteTreeCommand(
     command,
     positionals: result.positionals,
     ...(result.values.prefix !== undefined && { prefix: result.values.prefix })
+  };
+}
+
+function parseAddCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {
+      all: {
+        type: "boolean",
+        short: "A"
+      },
+      update: {
+        type: "boolean",
+        short: "u"
+      }
+    }
+  });
+
+  return {
+    command,
+    positionals: result.positionals,
+    addAll: result.values.all ?? false,
+    addUpdated: result.values.update ?? false
   };
 }
