@@ -10,7 +10,14 @@ export type RepositoryErrorCode =
   | "OBJECT_NOT_FOUND"
   | "OBJECT_CORRUPTED"
   | "INVALID_REFERENCE"
-  | "INVALID_HEAD";
+  | "INVALID_HEAD"
+  | "REFERENCE_ERROR"
+  | "COMMIT_ERROR"
+  | "LOG_ERROR"
+  | "SHOW_ERROR"
+  | "NOT_FOUND"
+  | "INVALID_OBJECT"
+  | "NOT_IMPLEMENTED";
 
 export class RepositoryError extends Error {
   public readonly code: RepositoryErrorCode;

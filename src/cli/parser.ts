@@ -24,9 +24,15 @@ export interface ParsedCliArguments {
   readonly treeObject?: string;
   // write-tree options
   readonly prefix?: string;
-  // add options
-  readonly addAll?: boolean;
-  readonly addUpdated?: boolean;
+  // commit options
+  readonly message?: string;
+  readonly allowEmpty?: boolean;
+  // log options
+  readonly oneline?: boolean;
+  readonly all?: boolean;
+  readonly graph?: boolean;
+  // show options
+  readonly ref?: string;
 }
 
 export function parseCliArguments(
@@ -47,7 +53,9 @@ export function parseCliArguments(
     "ls-tree",
     "rev-parse",
     "write-tree",
-    "add"
+    "commit",
+    "log",
+    "show"
   ];
 
   if (!validCommands.includes(command)) {
@@ -66,8 +74,12 @@ export function parseCliArguments(
     return parseRevParseCommand(command, args);
   } else if (command === "write-tree") {
     return parseWriteTreeCommand(command, args);
-  } else if (command === "add") {
-    return parseAddCommand(command, args);
+  } else if (command === "commit") {
+    return parseCommitCommand(command, args);
+  } else if (command === "log") {
+    return parseLogCommand(command, args);
+  } else if (command === "show") {
+    return parseShowCommand(command, args);
   }
 
   throw new Error(`Unhandled command: ${command}`);
@@ -255,7 +267,7 @@ function parseWriteTreeCommand(
   };
 }
 
-function parseAddCommand(
+function parseCommitCommand(
   command: string,
   args: string[]
 ): ParsedCliArguments {
@@ -264,13 +276,43 @@ function parseAddCommand(
     strict: true,
     allowPositionals: true,
     options: {
-      all: {
-        type: "boolean",
-        short: "A"
+      message: {
+        type: "string",
+        short: "m"
       },
-      update: {
-        type: "boolean",
-        short: "u"
+      "allow-empty": {
+        type: "boolean"
+      }
+    }
+  });
+
+  const message = result.values.message;
+
+  return {
+    command,
+    positionals: result.positionals,
+    ...(message !== undefined && { message }),
+    ...(result.values["allow-empty"] && { allowEmpty: true })
+  };
+}
+
+function parseLogCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {
+      oneline: {
+        type: "boolean"
+      },
+      all: {
+        type: "boolean"
+      },
+      graph: {
+        type: "boolean"
       }
     }
   });
@@ -278,7 +320,26 @@ function parseAddCommand(
   return {
     command,
     positionals: result.positionals,
-    addAll: result.values.all ?? false,
-    addUpdated: result.values.update ?? false
+    oneline: result.values.oneline ?? false,
+    all: result.values.all ?? false,
+    graph: result.values.graph ?? false
+  };
+}
+
+function parseShowCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {}
+  });
+
+  return {
+    command,
+    positionals: result.positionals,
+    ...(result.positionals[0] !== undefined && { ref: result.positionals[0] })
   };
 }
