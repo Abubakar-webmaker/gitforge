@@ -33,6 +33,16 @@ export interface ParsedCliArguments {
   readonly graph?: boolean;
   // show options
   readonly ref?: string;
+  // branch options
+  readonly branchName?: string;
+  readonly delete?: boolean;
+  readonly force?: boolean;
+  // switch options
+  readonly target?: string;
+  readonly create?: boolean;
+  // merge options
+  readonly branch?: string;
+  readonly abort?: boolean;
 }
 
 export function parseCliArguments(
@@ -55,7 +65,11 @@ export function parseCliArguments(
     "write-tree",
     "commit",
     "log",
-    "show"
+    "show",
+    "branch",
+    "switch",
+    "merge",
+    "merge-base"
   ];
 
   if (!validCommands.includes(command)) {
@@ -80,6 +94,14 @@ export function parseCliArguments(
     return parseLogCommand(command, args);
   } else if (command === "show") {
     return parseShowCommand(command, args);
+  } else if (command === "branch") {
+    return parseBranchCommand(command, args);
+  } else if (command === "switch") {
+    return parseSwitchCommand(command, args);
+  } else if (command === "merge") {
+    return parseMergeCommand(command, args);
+  } else if (command === "merge-base") {
+    return parseMergeBaseCommand(command, args);
   }
 
   throw new Error(`Unhandled command: ${command}`);
@@ -341,5 +363,111 @@ function parseShowCommand(
     command,
     positionals: result.positionals,
     ...(result.positionals[0] !== undefined && { ref: result.positionals[0] })
+  };
+}
+
+function parseBranchCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {
+      delete: {
+        type: "boolean",
+        short: "d"
+      },
+      "delete-force": {
+        type: "boolean",
+        short: "D"
+      }
+    }
+  });
+
+  const isForceDelete = result.values["delete-force"] ?? false;
+  const isDelete = (result.values.delete ?? false) || isForceDelete;
+
+  return {
+    command,
+    positionals: result.positionals,
+    ...(result.positionals[0] !== undefined && { branchName: result.positionals[0] }),
+    ...(isDelete && { delete: true }),
+    ...(isForceDelete && { force: true })
+  };
+}
+
+function parseSwitchCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {
+      create: {
+        type: "boolean",
+        short: "c"
+      }
+    }
+  });
+
+  return {
+    command,
+    positionals: result.positionals,
+    ...(result.positionals[0] !== undefined && { target: result.positionals[0] }),
+    ...(result.values.create && { create: true })
+  };
+}
+
+function parseMergeCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {
+      message: {
+        type: "string",
+        short: "m"
+      },
+      abort: {
+        type: "boolean"
+      }
+    }
+  });
+
+  const message = result.values.message;
+
+  return {
+    command,
+    positionals: result.positionals,
+    ...(result.positionals[0] !== undefined && { branch: result.positionals[0] }),
+    ...(message !== undefined && { message }),
+    ...(result.values.abort && { abort: true })
+  };
+}
+
+function parseMergeBaseCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {}
+  });
+
+  return {
+    command,
+    positionals: result.positionals,
+    ...(result.positionals[0] !== undefined && { 
+      object: `${result.positionals[0]}-${result.positionals[1]}` 
+    })
   };
 }
