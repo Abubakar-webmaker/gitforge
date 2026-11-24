@@ -25,3 +25,6 @@ export {
 
 // Phase 2: Git Object Database
 export * from "./objects/index.js";
+
+// Phase 6: Branching & Merging
+export * from "./branching/index.js";

@@ -9,6 +9,10 @@ import { executeWriteTreeCommand } from "./commands/write-tree.js";
 import { executeCommitCommand } from "./commands/commit.js";
 import { executeLogCommand } from "./commands/log.js";
 import { executeShowCommand } from "./commands/show.js";
+import { executeBranchCommand } from "./commands/branch.js";
+import { executeSwitchCommand } from "./commands/switch.js";
+import { executeMergeCommand } from "./commands/merge.js";
+import { executeMergeBaseCommand } from "./commands/merge-base.js";
 
 export async function dispatchCommand(
   args: ParsedCliArguments
@@ -48,6 +52,22 @@ export async function dispatchCommand(
 
     case "show":
       await executeShowCommand(args);
+      return;
+
+    case "branch":
+      await executeBranchCommand(args);
+      return;
+
+    case "switch":
+      await executeSwitchCommand(args);
+      return;
+
+    case "merge":
+      await executeMergeCommand(args);
+      return;
+
+    case "merge-base":
+      await executeMergeBaseCommand(args);
       return;
 
     default:
