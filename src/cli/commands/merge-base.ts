@@ -27,6 +27,13 @@ export async function executeMergeBaseCommand(
     const commitA = args.positionals[0];
     const commitB = args.positionals[1];
 
+    if (commitA === undefined || commitB === undefined) {
+      throw new RepositoryError(
+        "INVALID_ARGUMENTS",
+        "merge-base requires two commit arguments"
+      );
+    }
+
     const repo = await discoverRepository();
 
     const base = await findMergeBase(repo, commitA, commitB);
