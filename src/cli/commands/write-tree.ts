@@ -5,28 +5,45 @@
  * 
  * Converts the staging index to a tree object and writes it to the repository.
  * Returns the tree object hash.
- * 
- * Note: Requires index implementation. For Phase 3, this is a stub that
- * documents the interface but requires proper index support.
  */
 
 import type { ParsedCliArguments } from "../parser.js";
 import { discoverRepository } from "../../repository/discover.js";
+import { readIndex } from "../../index/index.js";
+import { createTree, writeTree } from "../../objects/index.js";
+import type { TreeEntry } from "../../objects/tree.js";
 
 export interface WriteTreeArgs extends ParsedCliArguments {
   readonly prefix?: string;
 }
 
 export async function executeWriteTreeCommand(
-  _args: WriteTreeArgs
+  args: WriteTreeArgs
 ): Promise<void> {
   try {
-    // Verify repository exists
-    await discoverRepository(process.cwd());
+    const repo = await discoverRepository(process.cwd());
 
-    throw new Error(
-      "write-tree: requires index/staging implementation"
-    );
+    // Read index
+    const index = await readIndex(repo.index.path);
+    if (!index) {
+      throw new Error("write-tree: index not found. Use 'git add' to stage files.");
+    }
+
+    // Build tree from index entries
+    const treeEntries: TreeEntry[] = [];
+    for (const entry of index.entries.values()) {
+      treeEntries.push({
+        name: entry.path.split("/").pop() || entry.path,
+        hash: entry.hash,
+        mode: entry.stat.mode
+      });
+    }
+
+    // Create and write tree
+    const tree = createTree(treeEntries);
+    const treeHash = await writeTree(repo, tree);
+
+    console.log(treeHash);
   } catch (error) {
     if (error instanceof Error) {
       console.error(`write-tree: ${error.message}`);

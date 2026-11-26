@@ -7,13 +7,15 @@ import { discoverRepository } from "../../repository/discover.js";
 import {
   createCommit,
   createCommitPerson,
-  writeCommit
+  writeCommit,
+  createTree
 } from "../../objects/index.js";
 import {
   readReference,
   writeReference,
   resolveHEAD
 } from "../../references/index.js";
+import { readIndex } from "../../index/index.js";
 import { RepositoryError } from "../../errors/repository-error.js";
 import { validateCommitMessage } from "../../utils/validation.js";
 import type { Repository } from "../../repository/repository.js";
@@ -37,16 +39,40 @@ export async function executeCommitCommand(
       );
     }
 
-    // For now, we'll need a write-tree like operation
-    // This would normally be integrated with the index
-    // For this implementation, we assume an index exists and can be converted to a tree
+    // Read index
+    const index = await readIndex(repo.index.path);
+    if (!index || index.entries.size === 0) {
+      throw new RepositoryError(
+        "COMMIT_ERROR",
+        "nothing staged for commit"
+      );
+    }
 
-    // TODO: Integrate with actual index reading
-    // For now, throw a helpful error
-    throw new RepositoryError(
-      "NOT_IMPLEMENTED",
-      "Index integration needed. Use write-tree and commit objects directly."
+    // Build tree from index entries
+    const treeEntries = Array.from(index.entries.values()).map(entry => ({
+      name: entry.path.split("/").pop() || entry.path,
+      hash: entry.hash,
+      mode: entry.stat.mode
+    }));
+
+    const tree = createTree(treeEntries);
+    const treeHash = tree.hash;
+
+    // Create commit using the existing helper
+    const commitHash = await createCommitFromTree(
+      repo,
+      treeHash,
+      args.message,
+      { name: "GitForge", email: "gitforge@example.com" },
+      { name: "GitForge", email: "gitforge@example.com" }
     );
+
+    // Clear index after successful commit
+    index.entries.clear();
+    const { writeIndex } = await import("../../index/index.js");
+    await writeIndex(repo.index.path, index);
+
+    return commitHash;
   } catch (error) {
     if (error instanceof RepositoryError) {
       throw error;
