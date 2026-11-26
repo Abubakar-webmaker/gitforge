@@ -34,7 +34,7 @@ export async function findMergeBase(
     // Return the most recent one (first in topological order)
     // For now, return the first common ancestor
     // A more sophisticated implementation would track commit dates
-    return commonAncestors[0];
+    return commonAncestors[0] ?? null;
   } catch (error) {
     if (error instanceof RepositoryError) {
       throw error;

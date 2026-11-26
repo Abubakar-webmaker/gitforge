@@ -15,6 +15,7 @@ import {
   resolveHEAD
 } from "../../references/index.js";
 import { RepositoryError } from "../../errors/repository-error.js";
+import { validateCommitMessage } from "../../utils/validation.js";
 import type { Repository } from "../../repository/repository.js";
 import type { ParsedCliArguments } from "../parser.js";
 
@@ -72,6 +73,9 @@ export async function createCommitFromTree(
   committer: { name: string; email: string }
 ): Promise<string> {
   try {
+    // Validate commit message
+    validateCommitMessage(message);
+
     // Get parent commit (if not a root commit)
     const head = await resolveHEAD(repository);
     const parents: string[] = [];

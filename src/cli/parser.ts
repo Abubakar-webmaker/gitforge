@@ -43,6 +43,8 @@ export interface ParsedCliArguments {
   // merge options
   readonly branch?: string;
   readonly abort?: boolean;
+  // diff options
+  readonly cached?: boolean;
 }
 
 export function parseCliArguments(
@@ -69,7 +71,8 @@ export function parseCliArguments(
     "branch",
     "switch",
     "merge",
-    "merge-base"
+    "merge-base",
+    "diff"
   ];
 
   if (!validCommands.includes(command)) {
@@ -102,6 +105,8 @@ export function parseCliArguments(
     return parseMergeCommand(command, args);
   } else if (command === "merge-base") {
     return parseMergeBaseCommand(command, args);
+  } else if (command === "diff") {
+    return parseDiffCommand(command, args);
   }
 
   throw new Error(`Unhandled command: ${command}`);
@@ -469,5 +474,28 @@ function parseMergeBaseCommand(
     ...(result.positionals[0] !== undefined && { 
       object: `${result.positionals[0]}-${result.positionals[1]}` 
     })
+  };
+}
+
+function parseDiffCommand(
+  command: string,
+  args: string[]
+): ParsedCliArguments {
+  const result = parseArgs({
+    args,
+    strict: true,
+    allowPositionals: true,
+    options: {
+      cached: {
+        type: "boolean"
+      }
+    }
+  });
+
+  return {
+    command,
+    positionals: result.positionals,
+    cached: result.values.cached ?? false,
+    ...(result.positionals[0] !== undefined && { file: result.positionals[0] })
   };
 }
