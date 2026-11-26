@@ -9,10 +9,9 @@
 
 import type { ParsedCliArguments } from "../parser.js";
 import { discoverRepository } from "../../repository/discover.js";
-import { readIndex } from "../../index/store.js";
-import { createTree } from "../../objects/tree.js";
-import { writeTree } from "../../objects/database.js";
-import type { TreeEntry } from "../../objects/types.js";
+import { readIndex } from "../../index/index.js";
+import { createTree, writeTree } from "../../objects/index.js";
+import type { TreeEntry } from "../../objects/tree.js";
 
 export interface WriteTreeArgs extends ParsedCliArguments {
   readonly prefix?: string;
@@ -22,18 +21,27 @@ export async function executeWriteTreeCommand(
   args: WriteTreeArgs
 ): Promise<void> {
   try {
-    // Discover repository
     const repo = await discoverRepository(process.cwd());
 
-    if (!repo || repo.bare) {
-      throw new Error("fatal: not a git repository");
+    // Read index
+    const index = await readIndex(repo.index.path);
+    if (!index) {
+      throw new Error("write-tree: index not found. Use 'git add' to stage files.");
     }
 
-    // Read index
-    const index = await readIndex(repo.layout.index);
-
     // Build tree from index entries
-    const treeHash = await indexToTree(index.entries, repo.layout.objects, args.prefix);
+    const treeEntries: TreeEntry[] = [];
+    for (const entry of index.entries.values()) {
+      treeEntries.push({
+        name: entry.path.split("/").pop() || entry.path,
+        hash: entry.hash,
+        mode: entry.stat.mode
+      });
+    }
+
+    // Create and write tree
+    const tree = createTree(treeEntries);
+    const treeHash = await writeTree(repo, tree);
 
     console.log(treeHash);
   } catch (error) {

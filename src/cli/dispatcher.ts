@@ -6,6 +6,8 @@ import { executeLsTreeCommand } from "./commands/ls-tree.js";
 import { executeRevParseCommand } from "./commands/rev-parse.js";
 import { executeWriteTreeCommand } from "./commands/write-tree.js";
 import { executeCommitCommand } from "./commands/commit.js";
+import { executeAddCommand } from "./commands/add.js";
+import { executeStatusCommand } from "./commands/status.js";
 import { executeLogCommand } from "./commands/log.js";
 import { executeShowCommand } from "./commands/show.js";
 import { executeBranchCommand, type BranchArgs } from "./commands/branch.js";
@@ -96,6 +98,14 @@ export async function dispatchCommand(
 
     case "commit":
       await executeCommitCommand(args);
+      return;
+
+    case "add":
+      await executeAddCommand(args);
+      return;
+
+    case "status":
+      await executeStatusCommand(args);
       return;
 
     case "log":

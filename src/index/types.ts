@@ -1,67 +1,55 @@
 /**
- * Git Index (staging area) types and structures.
- * Implements Git index version 2 binary format (DIRC).
+ * Phase 4: Index & Staging - Type Definitions
+ * Git index (staging area) file format and data structures
  */
 
 /**
- * Git index entry - represents a staged file.
- * Maps to a single entry in the Git index file.
- */
-export interface IndexEntry {
-  readonly ctime: {
-    readonly seconds: number;
-    readonly nanoseconds: number;
-  };
-  readonly mtime: {
-    readonly seconds: number;
-    readonly nanoseconds: number;
-  };
-  readonly dev: number;
-  readonly ino: number;
-  readonly mode: number;
-  readonly uid: number;
-  readonly gid: number;
-  readonly size: number;
-  readonly objectId: string; // SHA-1 hash as hex string
-  readonly flags: {
-    readonly staged: boolean;
-    readonly merged: boolean;
-    readonly assumeValid: boolean;
-    readonly extendedFlags: boolean;
-    readonly pathLength: number; // 12 bits
-  };
-  readonly path: string;
-}
-
-/**
- * Git Index - the staging area.
- * Contains version, entries, and checksum.
- */
-export interface GitIndex {
-  readonly version: number;
-  readonly entries: readonly IndexEntry[];
-  readonly checksum: Buffer; // SHA-1 (20 bytes)
-}
-
-/**
- * Index entry stat data (ctime, mtime, dev, ino, etc.)
+ * Git index entry stat information (40 bytes)
  */
 export interface IndexEntryStat {
-  readonly ctime: { readonly seconds: number; readonly nanoseconds: number };
-  readonly mtime: { readonly seconds: number; readonly nanoseconds: number };
-  readonly dev: number;
-  readonly ino: number;
-  readonly uid: number;
-  readonly gid: number;
-  readonly size: number;
+  ctime: { seconds: number; nanoseconds: number };
+  mtime: { seconds: number; nanoseconds: number };
+  dev: number;
+  ino: number;
+  mode: number;
+  uid: number;
+  gid: number;
+  size: number;
 }
 
 /**
- * Index entry flags packed into a 16-bit field.
+ * Git index entry flags (2 bytes)
  */
 export interface IndexEntryFlags {
-  readonly assumeValid: boolean; // 1 bit
-  readonly extended: boolean;    // 1 bit
-  readonly stage: number;         // 2 bits (0-3)
-  readonly pathLength: number;    // 12 bits (path length if < 4095)
+  assumeValid: boolean;      // bit 15
+  extended: boolean;         // bit 14
+  stage: number;             // bits 13-12 (0-3 for merge stages)
+  pathLength: number;        // bits 11-0 (capped at 0xFFF)
+}
+
+/**
+ * Single entry in the git index
+ */
+export interface IndexEntry {
+  stat: IndexEntryStat;
+  hash: string;              // 20-byte SHA-1 as hex string
+  flags: IndexEntryFlags;
+  path: string;              // relative path from repo root
+}
+
+/**
+ * Complete git index structure
+ */
+export interface GitIndex {
+  version: number;           // 2 or 3
+  entries: Map<string, IndexEntry>;  // path → entry
+}
+
+/**
+ * Index file header (12 bytes)
+ */
+export interface IndexHeader {
+  signature: string;         // "DIRC" (0x4449524320)
+  version: number;           // 32-bit big-endian
+  entryCount: number;        // 32-bit big-endian
 }
