@@ -31,6 +31,17 @@ export async function readReference(
 ): Promise<string | null> {
   try {
     const refPath = getRefPath(repository, ref);
+    
+    // Security: check for symlinks to prevent repository escape
+    const lstat = (await import("node:fs/promises")).lstat;
+    const stats = await lstat(refPath).catch(() => null);
+    if (stats?.isSymbolicLink()) {
+      throw new RepositoryError(
+        "REFERENCE_ERROR",
+        `Reference is a symbolic link, which is not allowed: ${ref}`
+      );
+    }
+    
     const content = await readFile(refPath, "utf-8");
     const target = content.trim();
 
@@ -92,6 +103,16 @@ export async function writeReference(
       throw new RepositoryError(
         "INVALID_REFERENCE",
         `Invalid reference target: ${target}`
+      );
+    }
+
+    // Security: check for existing symlinks
+    const lstat = (await import("node:fs/promises")).lstat;
+    const stats = await lstat(refPath).catch(() => null);
+    if (stats?.isSymbolicLink()) {
+      throw new RepositoryError(
+        "REFERENCE_ERROR",
+        `Reference path is a symbolic link, which is not allowed: ${ref}`
       );
     }
 
