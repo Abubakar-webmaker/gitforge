@@ -74,3 +74,6 @@ export {
   writeTree,
   writeCommit
 } from "./database.js";
+
+// Packfile support
+export * from "./packfile/index.js";
